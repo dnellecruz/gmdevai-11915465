@@ -14,22 +14,22 @@ public class VehicleMove : MonoBehaviour
     public float maxSpeed;
     public float breakAngle;
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         Vector3 lookAtGoal = new Vector3(goal.position.x, this.transform.position.y, goal.position.z);
         Vector3 direction = lookAtGoal - this.transform.position;
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation,
                                                    Quaternion.LookRotation(direction),
-                                                   Time.deltaTime * rotationSpeed);
+                                                   Time.fixedDeltaTime * rotationSpeed);
 
-        if (Vector3.Angle(goal.forward, this.transform.forward) > breakAngle && speed > 2)
+        if (Vector3.Angle(goal.forward, this.transform.forward) > breakAngle && speed > 10)
         {
-            speed = Mathf.Clamp(speed - (deceleration * Time.deltaTime), minSpeed, maxSpeed);
+            speed = Mathf.Clamp(speed - (deceleration * Time.fixedDeltaTime), minSpeed, maxSpeed);
         }
         else
         {
-            speed = Mathf.Clamp(speed + (acceleration * Time.deltaTime), minSpeed, maxSpeed);
+            speed = Mathf.Clamp(speed + (acceleration * Time.fixedDeltaTime), minSpeed, maxSpeed);
         }
 
         this.transform.Translate(0, 0, speed);
